@@ -1,0 +1,9 @@
++ trouver matière rouleau
++ finir electronique affichage
++ tracer route / espaces / enememis sur le rouleau
++ decider si techno magnetique ou optique
++ trouver alimentation
++ jouer de la musique / des sons (teensy ? / shields ?)
++ systeme droite gauche
++ plexiglass
++ peinture
