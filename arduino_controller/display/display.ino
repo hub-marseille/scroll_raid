@@ -1,3 +1,4 @@
+#include <LedControl.h>
 #include "MyDisplay.h"
 
 MyDisplay		g_display;
