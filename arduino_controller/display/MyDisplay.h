@@ -9,8 +9,6 @@
 	#include "WProgram.h"
 #endif
 
-#include <LedControl.h>
-
 #define		MATRIX_DIN	10
 #define		MATRIX_CS	16
 #define		MATRIX_CLK	14
@@ -39,9 +37,12 @@ private:
 	bool		mFillCount;
 	long		mLastNumber;
 	unsigned short	mLastLife;
+	unsigned char	lastLenght;
 
 	void	printDigit(long value, int offset, bool isNeg);
 	void	printByteArray(int matrixIt, byte array[8]);
+
+	unsigned char	countDigits(long value);
 	void	fillDigits(char value);
 };
 

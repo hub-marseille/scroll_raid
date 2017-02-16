@@ -84,12 +84,32 @@ void MyDisplay::fillDigits(char value)
 	mMatrix.setDigit(SCORE_MATRIX, 7, (byte)value, false);
 }
 
+unsigned char	MyDisplay::countDigits(long value)
+{
+	unsigned char	count = 0;
+
+	if (value < 0) {
+		count += 1;
+		value *= -1;
+	}
+	while (value > 0)
+	{
+		count += 1;
+		value /= 10;
+	}
+	return (count);
+}
+
 bool	MyDisplay::printNumber(long value)
 {
 	bool  isNeg = false;
+	unsigned char	lenght = countDigits(value);
 
-	if (value < -9999999 || value > 99999999)
+	if (lenght >= 8)
 		return (false);
+	if (lenght < lastLenght)
+		; // TODO clear all display
+	lastLenght = lenght;
 	if (value < 0) {
 		value *= -1;
 		isNeg = true;
