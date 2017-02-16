@@ -3,3 +3,10 @@
 ################################################################################
 
 /arduino_controller/display/.vs/display/v14
+/arduino_controller/display/Debug
+/arduino_controller/display/Release
+/arduino_controller/display/__vm
+*.sln
+*.vcxproj
+*.filters
+*.user

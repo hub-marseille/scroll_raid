@@ -9,6 +9,11 @@
 	#include "WProgram.h"
 #endif
 
+#include <LedControl.h>
+
+#define		ABS(x)	(x < 0 ? -x : x)
+#define		IS_NEG(x)	(x < 0)
+
 #define		MATRIX_DIN	10
 #define		MATRIX_CS	16
 #define		MATRIX_CLK	14
@@ -27,7 +32,6 @@ public:
 	MyDisplay();
 	~MyDisplay();
 	bool	printNumber(long value);
-	void clearNumberArtefacts(int value);
 	void	setFillCount(bool);
 	bool	getFillCount() const;
 	void	clearDigits();
@@ -39,11 +43,11 @@ private:
 	unsigned short	mLastLife;
 	unsigned char	lastLenght;
 
-	void	printDigit(long value, int offset, bool isNeg);
+	void	printDigit(long value, int offset);
 	void	printByteArray(int matrixIt, byte array[8]);
 
 	unsigned char	countDigits(long value);
-	void	fillDigits(char value);
+	void	fillDigits(char value, bool erase = true);
 };
 
 #endif

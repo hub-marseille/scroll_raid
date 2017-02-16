@@ -47,6 +47,7 @@ MyDisplay::MyDisplay()
 		mMatrix.setIntensity(it, LED_INTENSITY);
 		mMatrix.shutdown(it, false);
 	}
+	mMatrix.setIntensity(MATRIX_COUNT - 1, 0xF);
 	printByteArray(0, heart[0]);
 	printByteArray(1, heart[0]);
 	printByteArray(2, heart[0]);
@@ -72,9 +73,10 @@ void	MyDisplay::printByteArray(int matrixIt, byte data[8]) {
 	mMatrix.setColumn(matrixIt, 7, data[7]);
 }
 
-void MyDisplay::fillDigits(char value)
+void MyDisplay::fillDigits(char value, bool erase)
 {
-	mMatrix.setDigit(SCORE_MATRIX, 0, (byte)value, false);
+	if (erase)
+		mMatrix.setDigit(SCORE_MATRIX, 0, (byte)value, false);
 	mMatrix.setDigit(SCORE_MATRIX, 1, (byte)value, false);
 	mMatrix.setDigit(SCORE_MATRIX, 2, (byte)value, false);
 	mMatrix.setDigit(SCORE_MATRIX, 3, (byte)value, false);
@@ -107,26 +109,27 @@ bool	MyDisplay::printNumber(long value)
 
 	if (lenght >= 8)
 		return (false);
-	if (lenght < lastLenght)
-		; // TODO clear all display
-	lastLenght = lenght;
-	if (value < 0) {
-		value *= -1;
-		isNeg = true;
+	if (lenght < lastLenght) {
+		if (mFillCount)
+			fillDigits(0, !IS_NEG(value));
+		else
+			clearDigits();
 	}
-	printDigit(value, DIGIT_COUNT - 1, isNeg);
+	lastLenght = lenght;
+	printDigit(ABS(value), DIGIT_COUNT - 1);
+	if (value < 0) {
+		mMatrix.setChar(SCORE_MATRIX, (mFillCount ? 0 : (DIGIT_COUNT - lenght)), (byte)'-', false);
+	}
 	mLastNumber = value;
 	return (true);
 }
 
-void	MyDisplay::clearNumberArtefacts(int value)
+/* Recursive funtion */
+void	MyDisplay::printDigit(long value, int offset)
 {
-	if (mFillCount) {
-
-	}
-	else {
-
-	}
+	mMatrix.setDigit(SCORE_MATRIX, offset, (byte)(value % 10), false);
+	if (value / 10 > 0)
+		printDigit(value / 10, offset - 1);
 }
 
 void MyDisplay::setFillCount(bool value)
@@ -145,19 +148,3 @@ void MyDisplay::clearDigits()
 	mMatrix.clearDisplay(SCORE_MATRIX);
 }
 
-void	MyDisplay::printDigit(long value, int offset, bool isNeg)
-{
-	mMatrix.setDigit(SCORE_MATRIX, offset, (byte)(value % 10), false);
-	if (value / 10 > 0)
-		printDigit(value / 10, offset - 1, isNeg);
-	else
-	{
-		if (mFillCount)
-			while (offset > 0 && !(offset == 1 && isNeg)) {
-				mMatrix.setDigit(SCORE_MATRIX, offset - 1, 0, false);
-				offset -= 1;
-			}
-		if (isNeg)
-			mMatrix.setChar(SCORE_MATRIX, offset - 1, (byte)'-', false);
-	}
-}

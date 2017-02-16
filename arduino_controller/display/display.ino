@@ -4,18 +4,18 @@
 MyDisplay		g_display;
 
 void setup() {
-	g_display.setFillCount(false);
+	//g_display.setFillCount(false);
 }
 
 void loop() {
 	for (int i = 100; i > -101; --i)
 	{
 		g_display.printNumber(i);
-		delay(200);
+		delay(100);
 	}
 	for (int i = -100; i < 101; ++i)
 	{
 		g_display.printNumber(i);
-		delay(200);
+		delay(100);
 	}
 }
