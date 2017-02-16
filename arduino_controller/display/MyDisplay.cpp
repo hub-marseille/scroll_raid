@@ -41,7 +41,7 @@
 MyDisplay::MyDisplay()
 	: mMatrix(MATRIX_DIN, MATRIX_CLK, MATRIX_CS, MATRIX_COUNT)
 {
-	fillCount = true;
+	mFillCount = true;
 	for (short it = 0; it < MATRIX_COUNT; ++it) {
 		mMatrix.clearDisplay(it);
 		mMatrix.setIntensity(it, LED_INTENSITY);
@@ -50,7 +50,9 @@ MyDisplay::MyDisplay()
 	printByteArray(0, heart[0]);
 	printByteArray(1, heart[0]);
 	printByteArray(2, heart[0]);
+	mLastLife = 0;
 	printNumber(0);
+	mLastNumber = 0;
 }
 
 MyDisplay::~MyDisplay()
@@ -70,6 +72,18 @@ void	MyDisplay::printByteArray(int matrixIt, byte data[8]) {
 	mMatrix.setColumn(matrixIt, 7, data[7]);
 }
 
+void MyDisplay::fillDigits(char value)
+{
+	mMatrix.setDigit(SCORE_MATRIX, 0, (byte)value, false);
+	mMatrix.setDigit(SCORE_MATRIX, 1, (byte)value, false);
+	mMatrix.setDigit(SCORE_MATRIX, 2, (byte)value, false);
+	mMatrix.setDigit(SCORE_MATRIX, 3, (byte)value, false);
+	mMatrix.setDigit(SCORE_MATRIX, 4, (byte)value, false);
+	mMatrix.setDigit(SCORE_MATRIX, 5, (byte)value, false);
+	mMatrix.setDigit(SCORE_MATRIX, 6, (byte)value, false);
+	mMatrix.setDigit(SCORE_MATRIX, 7, (byte)value, false);
+}
+
 bool	MyDisplay::printNumber(long value)
 {
 	bool  isNeg = false;
@@ -81,7 +95,34 @@ bool	MyDisplay::printNumber(long value)
 		isNeg = true;
 	}
 	printDigit(value, DIGIT_COUNT - 1, isNeg);
+	mLastNumber = value;
 	return (true);
+}
+
+void	MyDisplay::clearNumberArtefacts(int value)
+{
+	if (mFillCount) {
+
+	}
+	else {
+
+	}
+}
+
+void MyDisplay::setFillCount(bool value)
+{
+	this->mFillCount = value;
+	clearDigits();
+}
+
+bool MyDisplay::getFillCount() const
+{
+	return (mFillCount);
+}
+
+void MyDisplay::clearDigits()
+{
+	mMatrix.clearDisplay(SCORE_MATRIX);
 }
 
 void	MyDisplay::printDigit(long value, int offset, bool isNeg)
@@ -91,7 +132,7 @@ void	MyDisplay::printDigit(long value, int offset, bool isNeg)
 		printDigit(value / 10, offset - 1, isNeg);
 	else
 	{
-		if (fillCount)
+		if (mFillCount)
 			while (offset > 0 && !(offset == 1 && isNeg)) {
 				mMatrix.setDigit(SCORE_MATRIX, offset - 1, 0, false);
 				offset -= 1;

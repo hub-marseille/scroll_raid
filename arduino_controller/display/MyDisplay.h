@@ -29,13 +29,20 @@ public:
 	MyDisplay();
 	~MyDisplay();
 	bool	printNumber(long value);
+	void clearNumberArtefacts(int value);
+	void	setFillCount(bool);
+	bool	getFillCount() const;
+	void	clearDigits();
 
 private:
 	LedControl	mMatrix;
-	bool		fillCount;
+	bool		mFillCount;
+	long		mLastNumber;
+	unsigned short	mLastLife;
 
 	void	printDigit(long value, int offset, bool isNeg);
 	void	printByteArray(int matrixIt, byte array[8]);
+	void	fillDigits(char value);
 };
 
 #endif
